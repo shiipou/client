@@ -1,0 +1,20 @@
+display_name: lenra
+package_name: lenra
+maintainer:
+  name: Lenra
+  email: contact@lenra.io
+priority: optional
+section: x11
+installed_size: 6604
+essential: false
+icon: assets/images/icon-512.png
+
+keywords:
+  - cloud
+
+generic_name: lenra
+
+categories:
+  - X-Utility
+
+startup_notify: true

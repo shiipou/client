@@ -1,0 +1,24 @@
+display_name: lenra
+
+icon: assets/images/icon-512.png
+
+keywords:
+  - cloud
+
+generic_name: lenra
+
+categories:
+  - X-Utility
+
+startup_notify: true
+
+# You can specify the shared libraries that you want to bundle with your app
+#
+# flutter_distributor automatically detects the shared libraries that your app
+# depends on, but you can also specify them manually here.
+#
+# The following example shows how to bundle the libcurl library with your app.
+#
+# include:
+#   - libcurl.so.4
+include: []

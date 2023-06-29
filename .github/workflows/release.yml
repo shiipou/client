@@ -1,0 +1,76 @@
+name: Release
+on:
+  push:
+    branches:
+    - main
+    - beta
+    - alpha
+    - "*.x"
+
+env:
+  FLUTTER_VERSION: '3.7.x'
+
+permissions:
+  contents: write
+
+jobs:
+  get-version:
+    uses: shiipou/github-actions/.github/workflows/get-version.yml@1-fix-flutter-release-didnt-work
+    with:
+      prerelease-branches: rc,beta,alpha
+  get-build:
+    uses: shiipou/github-actions/.github/workflows/increment-variable.yml@1-fix-flutter-release-didnt-work
+    with:
+      variable-name: build_number
+    secrets:
+      token: ${{ secrets.GH_TOKEN_WRITE_VARIABLES }}
+  build:
+    name: build-${{ matrix.platform }}
+    needs: [get-version, get-build]
+    uses: shiipou/github-actions/.github/workflows/build-flutter.yml@1-fix-flutter-release-didnt-work
+    strategy:
+      matrix:
+        platform: [ windows, linux, macos ]
+        include:
+          - platform: web
+            targets: zip
+            runner: ubuntu-latest
+            artifacts: dist/*/*
+          - platform: linux
+            targets: zip,deb,rpm,appimage
+            runner: ubuntu-latest
+            artifacts: dist/*/*
+          - platform: windows
+            targets: zip,exe,msix
+            runner: windows-latest
+            artifacts: dist/*/*
+          - platform: macos
+            targets: zip,dmg
+            runner: macos-latest
+            artifacts: dist/*/*
+          - platform: android
+            targets: apk,aab
+            runner: ubuntu-latest
+            artifacts: dist/*/*
+          - platform: ios
+            targets: ipa
+            runner: macos-latest
+            artifacts: dist/*/*
+    with:
+      package-name: ModMopet
+      version: ${{ needs.get-version.outputs.version }}
+      build: ${{ needs.get-build.outputs.value }}
+      platform: ${{ matrix.platform }}
+      targets: ${{ matrix.targets }}
+      runner: ${{ matrix.runner }}
+      artifacts: ${{ matrix.artifacts }}
+
+  release:
+    needs: build
+    uses: shiipou/github-actions/.github/workflows/release.yml@1-fix-flutter-release-didnt-work
+    with:
+      version:  ${{ needs.get-version.outputs.version }}
+      changelogs: ${{ needs.get-version.outputs.changelogs }}
+      is-prerelease: ${{ needs.get-version.outputs.is-prerelease }}
+      download-artifacts: true
+      assets: artifacts/*/*
