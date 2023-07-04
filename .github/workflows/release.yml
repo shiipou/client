@@ -8,7 +8,7 @@ on:
       - "*.x"
 
 env:
-  FLUTTER_VERSION: "3.7.x"
+  FLUTTER_VERSION: "3.10.x"
 
 permissions:
   contents: write
@@ -27,6 +27,7 @@ jobs:
   build:
     name: build-${{ matrix.platform }}
     needs: [get-version, get-build]
+    if: ${{ needs.get-version.outputs.will-release }}
     uses: shiipou/github-actions/.github/workflows/build-flutter.yml@main
     strategy:
       matrix:
@@ -67,10 +68,10 @@ jobs:
 
   release:
     needs: [build, get-version]
+    if: ${{ needs.get-version.outputs.will-release }}
     uses: shiipou/github-actions/.github/workflows/release.yml@main
     with:
       version: ${{ needs.get-version.outputs.version }}
       changelogs: ${{ needs.get-version.outputs.changelogs }}
       is-prerelease: ${{ needs.get-version.outputs.is-prerelease }}
       download-artifacts: true
-      assets: artifacts/*/*/*
