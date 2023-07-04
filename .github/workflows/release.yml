@@ -7,9 +7,6 @@ on:
       - alpha
       - "*.x"
 
-env:
-  FLUTTER_VERSION: "3.10.x"
-
 permissions:
   contents: write
 
@@ -65,7 +62,6 @@ jobs:
       targets: ${{ matrix.targets }}
       runner: ${{ matrix.runner }}
       artifacts: ${{ matrix.artifacts }}
-      flutter-version: $FLUTTER_VERSION
 
   release:
     needs: [build, get-version]
