@@ -15,11 +15,11 @@ permissions:
 
 jobs:
   get-version:
-    uses: shiipou/github-actions/.github/workflows/get-version.yml@main
+    uses: lenra-io/github-actions/.github/workflows/get-version.yml@main
     with:
       prerelease-branches: "^(rc|beta|alpha)$"
   get-build:
-    uses: shiipou/github-actions/.github/workflows/increment-variable.yml@main
+    uses: lenra-io/github-actions/.github/workflows/increment-variable.yml@main
     with:
       variable-name: build_number
     secrets:
@@ -28,7 +28,7 @@ jobs:
     name: build-${{ matrix.platform }}
     needs: [get-version, get-build]
     if: ${{ needs.get-version.outputs.will-release }}
-    uses: shiipou/github-actions/.github/workflows/build-flutter.yml@main
+    uses: lenra-io/github-actions/.github/workflows/build-flutter.yml@main
     strategy:
       matrix:
         platform: [windows, linux, macos]
@@ -69,7 +69,7 @@ jobs:
   release:
     needs: [build, get-version]
     if: ${{ needs.get-version.outputs.will-release }}
-    uses: shiipou/github-actions/.github/workflows/release.yml@main
+    uses: lenra-io/github-actions/.github/workflows/release.yml@main
     with:
       version: ${{ needs.get-version.outputs.version }}
       changelogs: ${{ needs.get-version.outputs.changelogs }}
