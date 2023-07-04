@@ -65,6 +65,7 @@ jobs:
       targets: ${{ matrix.targets }}
       runner: ${{ matrix.runner }}
       artifacts: ${{ matrix.artifacts }}
+      flutter-version: $FLUTTER_VERSION
 
   release:
     needs: [build, get-version]
