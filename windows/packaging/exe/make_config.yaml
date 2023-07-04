@@ -1,0 +1,10 @@
+# The value of AppId uniquely identifies this application.
+# Do not use the same AppId value in installers for other applications.
+app_id: 4FB521BA-98C0-43D0-8B74-891EA6D7B2E5 # TODO!: Change this!
+publisher: lenra
+publisher_url: https://github.com/lenra-io/client
+display_name: lenra
+create_desktop_icon: true
+install_dir_name: lenra
+locales:
+  - en

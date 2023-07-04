@@ -1,0 +1,20 @@
+display_name: lenra
+
+icon: assets/images/icon-512.png
+
+summary: Lenra client to run lenra apps
+group: Applications/Internet
+vendor: Lenra
+packager: Lenra
+packagerEmail: contact@lenra.io
+license: GPLv3
+url: https://github.com/lenra-io/client
+keywords:
+  - cloud
+
+generic_name: lenra
+
+categories:
+  - X-Utility
+
+startup_notify: true
