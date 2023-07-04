@@ -2,24 +2,24 @@ name: Release
 on:
   push:
     branches:
-    - main
-    - beta
-    - alpha
-    - "*.x"
+      - main
+      - beta
+      - alpha
+      - "*.x"
 
 env:
-  FLUTTER_VERSION: '3.7.x'
+  FLUTTER_VERSION: "3.7.x"
 
 permissions:
   contents: write
 
 jobs:
   get-version:
-    uses: shiipou/github-actions/.github/workflows/get-version.yml@1-fix-flutter-release-didnt-work
+    uses: shiipou/github-actions/.github/workflows/get-version.yml@main
     with:
-      prerelease-branches: rc,beta,alpha
+      prerelease-branches: "^(rc|beta|alpha)$"
   get-build:
-    uses: shiipou/github-actions/.github/workflows/increment-variable.yml@1-fix-flutter-release-didnt-work
+    uses: shiipou/github-actions/.github/workflows/increment-variable.yml@main
     with:
       variable-name: build_number
     secrets:
@@ -27,10 +27,10 @@ jobs:
   build:
     name: build-${{ matrix.platform }}
     needs: [get-version, get-build]
-    uses: shiipou/github-actions/.github/workflows/build-flutter.yml@1-fix-flutter-release-didnt-work
+    uses: shiipou/github-actions/.github/workflows/build-flutter.yml@main
     strategy:
       matrix:
-        platform: [ windows, linux, macos ]
+        platform: [windows, linux, macos]
         include:
           - platform: web
             targets: zip
@@ -57,7 +57,7 @@ jobs:
             runner: macos-latest
             artifacts: dist/*/*
     with:
-      package-name: ModMopet
+      package-name: io.lenra.client
       version: ${{ needs.get-version.outputs.version }}
       build: ${{ needs.get-build.outputs.value }}
       platform: ${{ matrix.platform }}
@@ -66,11 +66,11 @@ jobs:
       artifacts: ${{ matrix.artifacts }}
 
   release:
-    needs: build
-    uses: shiipou/github-actions/.github/workflows/release.yml@1-fix-flutter-release-didnt-work
+    needs: [build, get-version]
+    uses: shiipou/github-actions/.github/workflows/release.yml@main
     with:
-      version:  ${{ needs.get-version.outputs.version }}
+      version: ${{ needs.get-version.outputs.version }}
       changelogs: ${{ needs.get-version.outputs.changelogs }}
       is-prerelease: ${{ needs.get-version.outputs.is-prerelease }}
       download-artifacts: true
-      assets: artifacts/*/*
+      assets: artifacts/*/*/*
