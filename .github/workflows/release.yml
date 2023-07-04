@@ -62,6 +62,7 @@ jobs:
       targets: ${{ matrix.targets }}
       runner: ${{ matrix.runner }}
       artifacts: ${{ matrix.artifacts }}
+      flutter-extra-args: --flutter-build-args="--no-tree-shake-icons"
 
   release:
     needs: [build, get-version]
