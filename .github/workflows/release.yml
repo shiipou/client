@@ -50,10 +50,10 @@ jobs:
             targets: apk,aab
             runner: ubuntu-latest
             artifacts: dist/*/*
-          - platform: ios
-            targets: ipa
-            runner: macos-latest
-            artifacts: dist/*/*
+#           - platform: ios
+#             targets: ipa
+#             runner: macos-latest
+#             artifacts: dist/*/*
     with:
       package-name: io.lenra.client
       version: ${{ needs.get-version.outputs.version }}
